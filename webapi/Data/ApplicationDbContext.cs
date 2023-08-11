@@ -1,9 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using webapi.Data.Configurations;
 using webapi.Models;
 
 namespace webapi.Data
 {
-    public class ApplicationDbContext:DbContext
+    public class ApplicationDbContext: IdentityDbContext<ApiUser>
     {
         public ApplicationDbContext(DbContextOptions  options) :base(options) { 
         }
@@ -17,7 +19,7 @@ namespace webapi.Data
         {
             base.OnModelCreating(modelBuilder);
 
-
+            modelBuilder.ApplyConfiguration(new RoleConfig());
         }
     }
 }

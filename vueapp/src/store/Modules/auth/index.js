@@ -6,7 +6,9 @@ export default{
     namespaced:true,
     state(){
         return{
-
+            userId:null,
+            token:null,
+            role:0
         }
     },
     actions,
