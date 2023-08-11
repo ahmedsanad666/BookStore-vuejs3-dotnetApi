@@ -9,10 +9,14 @@ namespace webapi.Data
     {
         public ApplicationDbContext(DbContextOptions  options) :base(options) { 
         }
-        
+
 
         public DbSet<Category> Categories { get; set; }
-
+        public DbSet<Book>  Books { get; set; }
+        public DbSet<BookGrant> BookGrants { get; set; }
+        public DbSet<KnowledgeHub> knowledgeHubs { get; set; }
+        public DbSet<Question> Questions { get; set; }
+        public DbSet<UserQuestionsAnswer> UserQuestionsAnswers { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

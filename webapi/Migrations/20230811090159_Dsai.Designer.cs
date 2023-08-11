@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using webapi.Data;
 
@@ -11,9 +12,11 @@ using webapi.Data;
 namespace webapi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230811090159_Dsai")]
+    partial class Dsai
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,13 +54,13 @@ namespace webapi.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "61060c9e-6640-4ae1-b28a-8c77ac25530b",
+                            Id = "9c27065e-afbb-4f4d-be55-92ede5d98353",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "5f022af1-dd2d-45b7-b85b-5a76a802e2da",
+                            Id = "269a5a2c-f075-4e31-b7df-0a87d68c9b85",
                             Name = "User",
                             NormalizedName = "USER"
                         });
