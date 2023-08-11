@@ -22,7 +22,8 @@ namespace webapi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Category>>> GetCourses()
         {
-            return await _context.Categories.ToListAsync();
+            var categories = await _context.Categories.ToListAsync();
+            return categories;
         }
 
         // GET: api/Categories/5
@@ -73,7 +74,7 @@ namespace webapi.Controllers
         // POST: api/Categories
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Category>> PostCourse(Category Category)
+        public async Task<ActionResult<Category>> PostCourse( [FromBody]  Category Category)
         {
             _context.Categories.Add(Category);
             await _context.SaveChangesAsync();

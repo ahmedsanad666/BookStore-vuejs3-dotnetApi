@@ -91,7 +91,8 @@ export default {
             this.isLoading = true;
             try{
                 await this.$store.dispatch('auth/logIn',user);
-                this.$router.replace('/');
+               await  this.$router.replace('/');
+                location.reload();
 
             }catch(e){
                 this.error = new Error(e.message || "failed to login");

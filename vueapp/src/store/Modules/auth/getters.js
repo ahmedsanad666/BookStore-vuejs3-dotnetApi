@@ -10,6 +10,11 @@ export default {
     },
     isAdmin(state){
       return state.role == 1 ;
+    },
+    test(state){
+      console.log(state.userId);
+      
     }
+
   };
    

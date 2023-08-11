@@ -9,7 +9,7 @@ using webapi.Models;
 
 namespace webapi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("bookstore/[controller]")]
     [ApiController]
     public class BooksController : ControllerBase
     {
@@ -153,7 +153,8 @@ namespace webapi.Controllers
                 }
                 else
                 {
-                    return StatusCode((int)HttpStatusCode.InternalServerError, message);
+                    //return StatusCode((int)HttpStatusCode.InternalServerError, message);
+                    return BadRequest();
                 }
 
 

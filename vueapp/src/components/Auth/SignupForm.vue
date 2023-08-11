@@ -12,37 +12,37 @@
               <form @submit.prevent="submitData" class=" space-y-3">
                   <div>
                       <label for="fullName" class="block mb-2 text-sm font-medium"> الاسم بالعربية</label>
-                      <input @blur="ClearValidation('arName')" type="text" name="email" id="fullName" class="bg-gray-50 border border-gray-300  sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="eg . ahmed gamal" v-model.trim="arName.val" required="">
+                      <input @blur="ClearValidation('arName')" type="text" name="email" id="fullName" class="bg-gray-50 border border-gray-300  sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="eg . ahmed gamal" v-model.trim="arName.val" required="">
                       <p class=" text-red-800 py-2 font-bold mx-3" v-if="!arName.valid">{{ arName.error }}</p>
                   </div>
                   <div>
                       <label for="fullName" class="block mb-2 text-sm font-medium"> الاسم بالانجليزية</label>
-                      <input @blur="ClearValidation('enName')" type="text" name="email" id="fullName" class="bg-gray-50 border border-gray-300  sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="eg . ahmed gamal" v-model.trim="enName.val" required="">
+                      <input @blur="ClearValidation('enName')" type="text" name="email" id="fullName" class="bg-gray-50 border border-gray-300  sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="eg . ahmed gamal" v-model.trim="enName.val" required="">
                       <p class=" text-red-800 py-2 font-bold mx-3" v-if="!enName.valid">{{ enName.error }}</p>
 
                   </div>
                   <div>
                       <label for="fullName" class="block mb-2 text-sm font-medium"> اسم المستخدم</label>
-                      <input type="text" name="email" id="fullName" class="bg-gray-50 border border-gray-300  sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="eg . ahmed gamal" v-model.trim="userName.val" required="">
+                      <input type="text" name="email" id="fullName" class="bg-gray-50 border border-gray-300  sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="eg . ahmed gamal" v-model.trim="userName.val" required="">
       
 
                   </div>
                   <div>
                       <label for="email" class="block mb-2 text-sm font-medium">البريد الالكترونى</label>
-                      <input @blur="ClearValidation('email')" type="email" name="email" id="email" class="bg-gray-50 border border-gray-300  sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="name@company.com" v-model.trim="email.val" required="">
+                      <input @blur="ClearValidation('email')" type="email" name="email" id="email" class="bg-gray-50 border border-gray-300  sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="name@company.com" v-model.trim="email.val" required="">
                       <p class=" text-red-800 py-2 font-bold mx-3" v-if="!enName.valid">{{ email.error }}</p>
 
                   </div>
                   <div>
                       <label for="password" class="block mb-2 text-sm font-medium dark:text-white">كلمة المرور</label>
-                      <input @blur="ClearValidation('pass')" type="password" name="password" id="password" placeholder="••••••••" class="bg-gray-50 border border-gray-300 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" v-model.trim="pass.val" required="">
+                      <input @blur="ClearValidation('pass')" type="password" name="password" id="password" placeholder="••••••••" class="bg-gray-50 border border-gray-300 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" v-model.trim="pass.val" required="">
                       <p class=" text-red-800 py-2 font-bold mx-3" v-if="!pass.valid">{{ pass.error }}</p>
 
 
                   </div>
                   <div>
                       <label for="confirm-password" class="block mb-2 text-sm font-mediumdark:text-white">تاكيد كلمة المرور </label>
-                      <input @blur="ClearValidation('confirmPass')"  type="password" name="confirm-password" id="confirm-password" placeholder="••••••••" class="bg-gray-50 border border-gray-300 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" v-model.trim="confirmPass.val" required="">
+                      <input @blur="ClearValidation('confirmPass')"  type="password" name="confirm-password" id="confirm-password" placeholder="••••••••" class="bg-gray-50 border border-gray-300 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" v-model.trim="confirmPass.val" required="">
                       <p class=" text-red-800 py-2 font-bold mx-3" v-if="!confirmPass.valid">{{ confirmPass.error }}</p>
                   </div>
 <!-- 
@@ -192,5 +192,8 @@ export default {
 .mainForm {
     background: rgba(0,0,0,.6);
     color:white;
+}
+input{
+ color: black;
 }
 </style>

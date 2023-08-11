@@ -1,60 +1,47 @@
-
-
 <template>
-
-<div class="main min-h-screen ">
-  <nav-bar v-if="navBar"/>
-  <router-view/>
-  <the-footer v-if="Footer" />
-</div>
+  <div class="main min-h-screen">
+    <nav-bar v-if="navBar" />
+    <router-view />
+    <the-footer v-if="Footer" />
+  </div>
 </template>
 
 <script>
-import { fas } from '@fortawesome/free-solid-svg-icons';
-
+import { initFlowbite } from "flowbite";
 
 export default {
-  
-  data(){
-    return{
-      navBar:true,
-     Footer :true,
-
-    }
-
+  data() {
+    return {
+      navBar: true,
+      Footer: true,
+    };
   },
-  computed:{},
-  methods:{
+  computed: {},
+  methods: {
+    hideFooter() {
+      let currentRouter = this.$router.currentRoute.value.name;
 
-    hideFooter(){
-     
-      let currentRouter =this.$router.currentRoute.value.name;
-
-     if(currentRouter == 'Auth'){
-      this.Footer = false;
-      this.navBar = false;
-      
-     }
-    }
-
-  },
-  watch:{
-
-    $route(to,from){
-     this.hideFooter();
-    }
+      if (currentRouter == "Auth") {
+        this.Footer = false;
+        this.navBar = false;
+      }
     },
-  
-  created(){
+  },
+  watch: {
+    $route(to, from) {
+      this.hideFooter();
+      initFlowbite();
+    },
+  },
+
+  created() {
     this.hideFooter();
-    this.$store.dispatch('auth/tryLogin');
-
-  }
-
-}
+    this.$store.dispatch("auth/tryLogin");
+  },
+  mounted() {
+    initFlowbite();
+  },
+};
 </script>
 
-
-<style src="./assets/tailwind.css">
-
-</style>
+<style src="./assets/tailwind.css"></style>
