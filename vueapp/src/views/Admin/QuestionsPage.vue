@@ -1,250 +1,224 @@
 <template>
-    <section class="min-h-screen">
-      <h1 class="my-4 py-2 font-bold md:text-3xl text-2xl text-center">
-اقسام الدورة      </h1>
-  
-      <base-spinner v-if="isLoading"></base-spinner>
-      <div class="container py-4 my-3 md:px-2" v-else>
-        <div>
-          <button
-            @click="addNew()"
-            class="my-3 py-2 px-4 bg-slate-900 text-white"
-          >
-            اضافة
-          </button>
-        </div>
-        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-          <table
-            class="w-full text-sm text-left text-gray-500 dark:text-gray-400"
-          >
-            <thead
-              class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
-            >
-              <tr>
-                <th scope="col" class="px-6 py-3">عنوان الفصل</th>
-                <th scope="col" class="px-6 py-3">الترتيب </th>
-                <th scope="col" class="px-6 py-3">مخفى</th>
-                <th scope="col" class="px-6 py-3"> عنوان اكورس</th>
-                <th scope="col" class="px-6 py-3 text-center">التحكم</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(el, key) in allChapters" :key="key">
-                <th
-                  scope="row"
-                  class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                >
-                  {{ el.name }}
-                </th>
-                <!-- <td class="px-6 py-4">{{ el.name }}</td> -->
-                <td class="px-6 py-4">{{ el.index }}</td>
-                <td class="px-6 py-4">{{ el.isHidden ?'غير مفعل ' : 'مفعل' }}</td>
-                <td class="px-6 py-4">{{ el.course.name }}</td>
-                <td class="px-6 py-4 space- x-4 space-y-3 text-center text-white">
-                  <button
-                    @click="DeleteChapter(el.id)"
-                    class="py-2 px-4 bg-red-700 rounded-md md:mx-1"
-                  >
-                    حذف
-                  </button>
-                  <button
-                    @click="update(el.id,el.course.id)"
-                    class="py-2 px-4 rounded-md bg-neutral-700 md:mx-1"
-                  >
-                    تعديل
-                  </button>
-                  <router-link class="border text-black py-2 px-4  rounded-md" :to="`/Admin/${el.course.id}/${el.id}`">
-                    اضافة دروس
-                  </router-link>
-                  
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-  
-      <!-- ................... add new section -->
-  
-      <div class="container md:w-1/2 w-3/4" v-if="!hidden">
-        <h1 class="md:text-3xl text-3xl text-center">{{ AddNewMood ? 'اضافة فصل جديد':"تعديل " }} </h1>
-        <form @submit.prevent="submitData">
-          <div class="form-control">
-            <label for="name">الاسم</label>
-            <input type="text" id="name" v-model.trim="updateCourseData.name" />
+  <section class="my-4 py-4">
+    <base-spinner v-if="isLoading"></base-spinner>
+
+    <div class="container lg:w-1/2 w-3/4">
+      <ul>
+        <li class="question" v-for="(q, key) in allQuestions" :key="key">
+          السؤال {{ key + 1 }}: {{ q.questionText }}؟
+          <div class="flex ">
+            <div class="choice" v-for="(choice, num) in q.choices" :key="num">
+              <span :class="`choice-${num}`">{{ num + 1 }}) {{ choice }}</span>
+            </div>
           </div>
-          <div class="form-control">
-            <label for="des">الترتيب</label>
-          <input type="number" v-model.number="updateCourseData.index">
+        </li>
+
+        <!-- Add more questions here -->
+      </ul>
+    </div>
+    <div class="container lg:w-1/2 w-3/4 shadow-md rounded-lg py-2 px-3">
+      <form @submit.prevent="submitForm" class="space-y-3">
+        <div
+          class="rounded-sm shadow-md w-[90%] quesitonBox m-auto mt-3 py-2 px-3"
+        >
+          <h1 class="text-center font-bold">اضافة سؤال</h1>
+
+          <div class="space-y-3 flex flex-col">
+            <label for="question">محتوى </label>
+            <textarea
+              v-model.trim="question.questionText"
+              placeholder="question tex"
+              id="question"
+              class="bg-zinc-400"
+            ></textarea>
           </div>
-          <div class="form-control">
-            <label for="active">مفعل</label>
+
+          <div class="my-3">
+            <div v-for="(question, key) in question" :key="key"></div>
+            <div>
+              <input
+                type="text"
+                class="mx-2 py-1 px-2 rounded-sm shadow-md outline-none"
+                v-model="choice"
+                placeholder="اضافة اختيار"
+              />
+              <span
+                @click="AddChoice()"
+                class="py-1 px-3 bg-slate-400 hover:bg-slate-900 hover:text-white"
+              >
+                اضافة
+              </span>
+            </div>
+
+            <ul>
+              <li
+                class="py-2 px-3 shadow-md w-1/3 relative"
+                @click="removeChoice(key)"
+                v-for="(choice, key) in currentChoices"
+                :key="key"
+              >
+                <font-awesome-icon
+                  :icon="['fas', 'xmark']"
+                  class="absolute top-2 left-2 cursor-pointer p-1 bg-slate-600 text-white"
+                />
+                {{ key + 1 }}: {{ choice }}
+              </li>
+            </ul>
+          </div>
+          <div>
             <input
-              type="checkbox"
-              id="active"
-              v-model="updateCourseData.isHidden"
+              type="number"
+              v-model.number="question.answer"
+              placeholder="answer"
             />
+            <span> اختر رقم الاجابة الصيحيه</span>
           </div>
-  
-         
-          <p v-if="!formIsValid">لا تترك مدخلات فارغه</p>
-          <button class="py-2 px-4 rounded-md bg-neutral-700 md:mx-1">
-            ارسال
-          </button>
-        </form>
-      </div>
-    </section>
-  </template>
-  
-  <script>
-  export default {
-    data() {
-      return {
-        hidden: true,
-        isLoading: false,
-        allChapters: [],
-        formatedDate: "",
-        error: "",
-        chapterId: 0,
-        courseId:0,
-        updateCourseData: {
-          name: "",
+          <input
+            type="number"
+            v-model.number="question.point"
+            placeholder="point"
+          />
+        </div>
+        <div class="">
+          <span
+            class="py-2 px-4 cursor-pointer rounded-md text-white bg-neutral-700 md:mx-1"
+            @click="submitForm()"
+          >
+            اضافة سؤال
+          </span>
+        </div>
+      </form>
+    </div>
+  </section>
+</template>
+
+<script>
+import { faL } from "@fortawesome/free-solid-svg-icons";
+export default {
+  data() {
+    return {
+      error: "",
+      isLoading: false,
+
+      allQuestions: [],
+
+      question: [
+        {
+          questionText: "",
           index: 0,
-          isHidden: true,
-       
+          choices: [],
+          answer: 0,
+          point: 0,
         },
-        formIsValid: true,
-        AddNewMood: false,
+      ],
+
+      choice: "",
+      currentChoices: [],
+    };
+  },
+  methods: {
+    async getbookQuestions() {
+      this.isLoading = true;
+      try {
+        await this.$store.dispatch("book/getBookQuestions");
+
+        this.allQuestions = this.$store.getters["book/bookQuesions"];
+      } catch (e) {
+        this.error = e.message || "failed to get questions";
+      }
+
+      this.isLoading = false;
+    },
+    removeChoice(e) {
+      // if()
+      this.currentChoices.splice(e, 1);
+    },
+    AddChoice() {
+      this.currentChoices.push(this.choice);
+      this.choice = "";
+    },
+
+    // clear() {
+    //   this.slide.questions.questionText = "";
+    //   this.slide.content = "";
+    //   this.slide.questions.answer = 0;
+    //   this.slide.questions.point = 0;
+    //   this.currentChoices = [];
+    // },
+
+    // addSlide() {
+    //   this.slide.questions.slideId = this.slide.customId;
+    //   this.slide.questions.choices = this.currentChoices;
+    //   this.slide.LessonId = +this.LessonId;
+    //   this.slide.questions.splice(0,1)
+    //   this.allSlides.push({
+    //     ...this.slide,
+    //     questions: [{
+    //       ...this.slide.questions,
+    //     }],
+    //   });
+
+    //   // this.clear();
+    // },
+    // getlessonId() {
+    //   this.LessonId = this.$route.params.lessonId;
+    // },
+    async submitForm() {
+      this.isLoading = true;
+
+      let question = {
+        questionText: this.question.questionText,
+        index: this.allQuestions.length + 1,
+        choices: this.currentChoices,
+        answer: this.question.answer,
+        point: this.question.point,
+        bookId: +this.$route.params.bookId,
       };
-    },
-    methods: {
-      async loadChapters() {
-        this.isLoading = true;
-         const courseId = this.$route.params.CourseId;
-         this.courseId = +courseId;
-        try {
-          await this.$store.dispatch("courses/AllCourses");
-          await this.$store.dispatch("courses/userchapters");
 
-          this.allChapters = this.$store.getters["courses/CoureChapters"].filter(el => el.courseId == courseId);
-          this.updateCourseData.index = this.allChapters.length + 1 ;
-        } catch (e) {
-          this.Error = "failed to Get Courses" || e.message;
-        }
-        this.isLoading = false;
-      },
-      async DeleteChapter(id) {
-        const courseId = this.$route.params.CourseId;
+      try {
+        await this.$store.dispatch("book/AddQuestion", question);
+        location.reload();
+      } catch (e) {
+        this.error = e.message || "failed to send slides";
+      }
 
-        this.isLoading = true;
-        try {
-          await this.$store.dispatch("courses/deletechapter", id);
-          await this.$store.dispatch("courses/AllCourses");
-          this.allChapters = this.$store.getters["courses/CoureChapters"].filter(el => el.courseId == courseId);
-          location.reload();
-        } catch (e) {
-          this.error = e.message || "failed to delete";
-        }
-        this.isLoading = false;
-      },
-      update(id) {
-        let chapter = this.$store.getters["courses/CoureChapters"].find(el => el.id == id);
-        // let chapter = this.allChapters.find((el) => el.id == id);
-        this.AddNewMood = false;
-        this.chapterId = id;
-        this.updateCourseData = chapter;
-        this.hidden = false;
-      },
-      addNew() {
-        this.AddNewMood = true;
-        this.hidden = false;
-        
-      },
-      async submitData() {
-        this.formIsValid = true;
-        if (
-          this.updateCourseData.name === "" ||
-          this.updateCourseData.index === 0
-        ) {
-          this.formIsValid = false;
-          return;
-        }
-  
-        this.isLoading = true;
-        let payload ;
-        if(this.AddNewMood){
-  
-           payload = {
-               
-               name: this.updateCourseData.name,
-               index: this.updateCourseData.index,
-               isHidden: this.updateCourseData.isHidden,
-               courseId:this.courseId
-            };
-        }else{
-            
-            payload = {
-               id: this.chapterId,
-            
-            name: this.updateCourseData.name,
-            index: this.updateCourseData.index,
-            isHidden: this.updateCourseData.isHidden,
-           courseId:     this.courseId
+      this.isLoading = false;
+    },
+  },
 
-          };
-        }
-        try {
-            console.log(payload);
-          if (this.AddNewMood) {
-            await this.$store.dispatch("courses/AddChapter", payload);
-          } else {
-            await this.$store.dispatch("courses/UpdateChapter", payload);
-          }
-  
-        } catch (e) {
-          this.error = e.message || "failed to update";
-        }
-        this.isLoading = false;
-       location.reload();
-      },
-    },
-  
-    created() {
-      this.loadChapters();
-    },
-  };
-  </script>
-  
-  <style scoped>
-  form {
-    margin: 1rem;
-    padding: 1rem;
-  }
-  
-  .form-control {
-    margin: 0.5rem 0;
-  }
-  
-  label {
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-    display: block;
-  }
-  
-  input,
-  textarea {
-    display: block;
-    width: 100%;
-    font: inherit;
-    border: 1px solid #ccc;
-    padding: 0.15rem;
-  }
-  
-  input:focus,
-  textarea:focus {
-    border-color: #3d008d;
-    background-color: #faf6ff;
-    outline: none;
-  }
-  </style>
-  
+  created() {
+    this.getbookQuestions();
+  },
+};
+</script>
+
+<style scoped>
+.question {
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+/* Style for the choices */
+.choice {
+  margin-right: 20px;
+}
+
+.choice span {
+  margin-left: 10px;
+  font-weight: normal;
+}
+
+/* Different colors for choices */
+.choice .choice-0 {
+  color: blue;
+}
+.choice .choice-1 {
+  color: green;
+}
+.choice .choice-2 {
+  color: red;
+}
+.choice .choice-3 {
+  color: purple;
+}
+</style>

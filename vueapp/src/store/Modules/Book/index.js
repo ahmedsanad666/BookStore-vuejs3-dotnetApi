@@ -8,6 +8,7 @@ export default{
         return{
             categories:[],
             books:[],
+            questions:[],
         }
     },
     actions,

@@ -1,7 +1,7 @@
 <template>
   <section class="min-h-screen">
     <h1 class="my-4 py-2 font-bold md:text-3xl text-2xl text-center">
-      اضافة دورات
+      اضافة كتاب 
     </h1>
 
     <base-spinner v-if="isLoading"></base-spinner>
@@ -24,8 +24,8 @@
             <tr>
               <th scope="col" class="px-6 py-3">عنوان</th>
               <th scope="col" class="px-6 py-3">الناشر</th>
-              <th scope="col" class="px-6 py-3">صورة</th>
-              <th scope="col" class="px-6 py-3">القسم</th>
+              <th scope="col" class="px-8  py-3 text-start ">صورة</th>
+              <!-- <th scope="col" class="px-6 py-3">القسم</th> -->
               <th scope="col" class="px-6 py-3">İSBN</th>
               <th scope="col" class="px-6 py-3 text-start">الوصف</th>
               <!-- <th scope="col" class="px-6 py-3">تاريخ</th>
@@ -39,30 +39,23 @@
                 scope="row"
                 class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
               >
-                {{ el.name }}
+                {{ el.title }}
               </th>
+              <td class="px-6 py-4  text-center">{{ el.author }}</td>
+              <td class="px-6 py-4   ">
+                <img :src="`data:image/png;base64;,${el.imgByte} ` " class="m-auto" alt="">
+              </td>
+              <td class="px-6 py-4 ">{{ el.isbn}}</td>
               <td class="px-6 py-4 des">{{ el.description }}</td>
-              <td class="px-6 py-4">{{ el.Date }}</td>
-              <td class="px-6 py-4">{{ el.updateD }}</td>
-              <td class="px-6 py-4 space-x-4 space-y-3 text-center text-white">
-                <button
-                  @click="DeleteCourse(el.id)"
-                  class="py-2 px-4 bg-red-700 rounded-md md:mx-1"
-                >
-                  حذف
-                </button>
-                <button
-                  @click="update(el.id)"
-                  class="py-2 px-4 rounded-md bg-neutral-700 md:mx-1"
-                >
-                  تعديل
-                </button>
+              <!-- <td class="px-6 py-4">{{ el.Date }}</td> -->
+              <!-- <td class="px-6 py-4">{{ el.updateD }}</td> -->
+              <td class="px-6 py-4  text-white text-center">
 
                 <router-link
                   class="py-2 px-4 rounded-md bg-amber-800 border"
-                  :to="`/Admin/${el.id}`"
+                  :to="`/book/${el.id}`"
                 >
-                  اضافة فصول
+                  اضافة اسئلة
                 </router-link>
               </td>
             </tr>
@@ -170,7 +163,6 @@ export default {
       try {
         await this.$store.dispatch("book/AllBooks");
         this.allCourses = this.$store.getters["book/allBooks"];
-      console.log(this.allCourses);
      
       } catch (e) {
         this.Error = "failed to Get Courses" || e.message;
@@ -254,6 +246,7 @@ export default {
 </script>
 
 <style scoped>
+
 form {
   margin: 1rem;
   padding: 1rem;
@@ -290,5 +283,10 @@ textarea:focus {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+img{
+  width:2.5rem;
+  height:2.5rem;
+  aspect-ratio: 1/2;
 }
 </style>

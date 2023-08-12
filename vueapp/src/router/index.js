@@ -3,6 +3,7 @@ import AuthPage from '../views/Auth/AuthPage.vue';
 import HomePage from '../views/HomePage.vue';
 import CategoryPage from '../views/Admin/CategoryPage.vue';
 import BookPage from '../views/Admin/BookPage.vue';
+import QuestionsPage from '../views/Admin/QuestionsPage.vue';
 
 
 
@@ -44,6 +45,14 @@ const routes = [
     component:BookPage,
     meta:{
       title:'addBook'
+    }
+  },
+  {
+    path:'/book/:bookId',
+    name:'quiz',
+    component:QuestionsPage,
+    meta:{
+      title:'quiz'
     }
   }
 

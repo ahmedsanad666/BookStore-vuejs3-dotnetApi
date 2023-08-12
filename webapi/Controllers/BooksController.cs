@@ -29,7 +29,7 @@ namespace webapi.Controllers
             var all = await _context.Books.Include(w => w.ApiUser).Include(q => q.Category).ToListAsync();
             foreach (var Book in all)
             {
-                    string fileName = "images" + Book.Id + ".png";
+                        string fileName = "images" + Book.Id + ".png";
                 try
                 {
                     var path = Path.Combine(_webHostEnvironment.WebRootPath, "images", fileName);

@@ -5,7 +5,10 @@ export default {
     },
     setBooks(state,paylaod){
       state.books = paylaod
-    }
+    },
+    setquestions(state,paylaod){
+      state.questions = paylaod
+    },
   
   };
   

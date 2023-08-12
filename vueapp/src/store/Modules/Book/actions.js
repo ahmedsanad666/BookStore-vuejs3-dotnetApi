@@ -1,6 +1,7 @@
 
 const categoryLink = "https://localhost:7130/bookstore/categories";
 const bookLink = "https://localhost:7130/bookstore/books";
+const QuestionsLink = "https://localhost:7130/bookstore/Questions";
 export default{
 
   //...................... category
@@ -75,5 +76,44 @@ export default{
           const error = 'failed to send data';
           throw error;
         }
-      }
+      },
+
+      // .................................. questions
+      async getBookQuestions(context ){
+        const response = await fetch(QuestionsLink);
+          const responseData = await response.json();
+        
+          if (!response.ok) {
+            const error = new Error(responseData.message || 'failed to get quesiots');
+      
+            throw error;
+          }
+          const questions =[];
+          console.log(responseData);
+           responseData.forEach(element => {
+            questions.push(element);       
+           });
+    
+            context.commit("setquestions",questions);
+        },
+
+          async AddQuestion(_,paylaod ){
+            const response = await fetch(QuestionsLink,
+            {
+              method:'POST',
+            
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body:JSON.stringify(paylaod)
+            },);
+    
+            console.log(JSON.stringify(paylaod));
+          
+            if (!response.ok) {
+              const error = 'failed to send data';
+              throw error;
+            }
+          }
+    
 }

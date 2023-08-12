@@ -4,6 +4,9 @@ export default {
     },
     allBooks(state){
       return state.books;
+    },
+    bookQuesions(state){
+      return state.questions
     }
    
 
