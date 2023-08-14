@@ -4,6 +4,7 @@ const bookLink = "https://localhost:7130/bookstore/books";
 const QuestionsLink = "https://localhost:7130/bookstore/Questions";
 const GrantsLink = "https://localhost:7130/bookstore/bookgrants";
 const libraryLink = "https://localhost:7130/bookstore/KnowledgeHubs";
+const questionData ="https://localhost:7130/bookstore/UserQuestionsAnswers";
 
 export default{
 
@@ -112,7 +113,7 @@ export default{
           },
       // .................................. grants
 
-      async GetGrants(context ){
+      async GetLibraries(context ){
         const response = await fetch(libraryLink);
           const responseData = await response.json();
         
@@ -129,7 +130,7 @@ export default{
             context.commit("setlibraries",libraries);
         },
 
-          async AddGrant(_,paylaod ){
+          async AddLibrary(_,paylaod ){
             const response = await fetch(libraryLink,
             {
               method:'POST',
@@ -146,9 +147,9 @@ export default{
               throw error;
             }
           },
-      // .................................. libraries
+      // .................................. grants
 
-      async GetLibraries(context ){
+      async GetGrants(context ){
         const response = await fetch(GrantsLink);
           const responseData = await response.json();
         
@@ -165,8 +166,26 @@ export default{
             context.commit("setGrants",grants);
         },
 
-          async Addlibrary(_,paylaod ){
+          async AddGrant(_,paylaod ){
             const response = await fetch(GrantsLink,
+            {
+              method:'POST',
+            
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body:JSON.stringify(paylaod)
+            },);
+    
+          
+            if (!response.ok) {
+              const error = 'failed to send data';
+              throw error;
+            }
+          },
+          //..... update quesiotn
+          async AddQuestionData (_,paylaod ){
+            const response = await fetch(questionData,
             {
               method:'POST',
             

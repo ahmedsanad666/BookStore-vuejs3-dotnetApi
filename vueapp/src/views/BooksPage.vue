@@ -53,7 +53,7 @@
         </div>
       </div>
       <h1 v-else class="text-center md:text-3xl text-2xl my-4 py-4">
-       لم يتم تجمل ملفات بعد
+       لم يتم تحميل ملفات بعد
       </h1>
     </section>
   </template>

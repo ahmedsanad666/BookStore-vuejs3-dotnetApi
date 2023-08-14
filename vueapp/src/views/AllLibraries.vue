@@ -1,32 +1,29 @@
 <template>
   <section class="min-h-screen py-3">
     <div class="book-grant-list md:w-3/4 w-[90%] m-auto">
-      <h1 class="text-center md:text-3xl text-2xl my-4 py-4">
-        Your BookGrants
-      </h1>
+      <h1 class="text-center md:text-3xl text-2xl my-4 py-4">مكتباتنا</h1>
 
       <base-spinner v-if="isLoading"></base-spinner>
-      <ul v-if="bookGrants.length > 0">
+      <ul v-if="libraries.length > 0">
         <li
-          v-for="(grant, index) in bookGrants"
+          v-for="(el, index) in libraries"
           :key="index"
           class="book-grant rounded-md shadow-lg py-3 px-5"
         >
-          <div class="book-title">{{ grant.bookTitle }}</div>
+          <div class="book-title">{{ el.name }}</div>
           <div class="book-details">
-            <span class="isbn">رقم الكتاب: {{ grant.isbn }}</span>
-            <span class="grant-code">كود الهدية: {{ grant.grantCode }}</span>
-            <span class="valid-days"
-              >عدد الأيام الصالحة: {{ grant.validTillDate }}</span
-            >
-            <span class="grant-date"
-              >تاريخ الهدية: {{ grant.recordedDate }}</span
-            >
+            <span class="isbn"> الدولة: {{ el.country }}</span>
+            <span class="grant-code">
+              <a :href="el.place">تابع الموقع من خلال الخريطة  </a>
+            </span>
+            <span class="valid-days">البريد الالكتروني : {{ el.email }}</span>
+            <span class="valid-days">الموقع الابكتروني : {{ el.website }}</span>
+            <span class="valid-days">الهاتف : {{ el.phoneNumber }}</span>
           </div>
         </li>
       </ul>
       <h1
-        v-else-if="bookGrants.length === 0 && error === ''"
+        v-else-if="libraries.length === 0 && error === ''"
         class="text-center md:text-3xl text-2xl my-4 py-4"
       >
         لم تحصل على هدايا بعد
@@ -35,47 +32,36 @@
       <h1 v-else class="text-center md:text-3xl text-2xl my-4 py-4">
         {{ error }}
       </h1>
-
-      <!-- ............ -->
     </div>
   </section>
 </template>
 
 <script>
-import dayjs from "dayjs";
-import "dayjs/locale/en";
 export default {
   data() {
     return {
-      bookGrants: [],
+      libraries: [],
       isLoading: false,
       error: "",
     };
   },
   methods: {
-    async getGrants() {
+    async allLibraries() {
       this.isLoading = true;
-      const userId = this.$store.getters["auth/userId"];
 
       try {
-        await this.$store.dispatch("book/GetGrants");
-        const allGrants = this.$store.getters["book/grants"];
-        this.bookGrants = allGrants.filter((el) => el.apiUserId === userId);
-        this.bookGrants = this.bookGrants.map((el) => {
-          el.recordedDate = dayjs(el.recordedDate).format("ddd MMM YYYY");
-          return el;
-        });
-        console.log(this.bookGrants)
+        await this.$store.dispatch("book/GetLibraries");
+        this.libraries = this.$store.getters["book/libraries"];
       } catch (e) {
         this.error = new Error(
-          e.message || "failed to get grants try again later "
+          e.message || "failed to get data try again later "
         );
       }
       this.isLoading = false;
     },
   },
   created() {
-    this.getGrants();
+    this.allLibraries();
   },
 };
 </script>
@@ -96,7 +82,12 @@ export default {
       font-weight: bold;
       margin-bottom: 5px;
     }
-
+    a{
+      color:blue;
+      &:hover{
+        color:brown;
+      }
+    }
     .book-details {
       display: flex;
       flex-direction: column;

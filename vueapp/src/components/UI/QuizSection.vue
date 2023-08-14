@@ -4,7 +4,7 @@
       <div class="overlay" @click="$emit('TryClose')"></div>
     </Teleport>
     <!-- question -->
-    <div v-if="currentMood === 'quiz' && !currentQ">
+    <div v-if="currentMood === 'quiz' && currentQ">
       <div class="h-full w-[90%] space-y-6 m-auto py-6">
         <div class="bg-mianColor py-7 shadow-lg px-5 rounded-xl mx-auto">
           <p class="text-center max-w-xl mx-auto">
@@ -40,8 +40,8 @@
       <h1 class="text-center my-4 py-4 text-3xl" v-if="message">
         {{ message }}
       </h1>
-      <div class="w-full py-2 mt-3">
-        <router-link to="/grants" class="py-2 px-4 text-xl font-bold m-auto"
+      <div class="w-full py-2 mt-3 text-center ">
+        <router-link to="/grants" class=" border rounded-md   hover:text-slate-900 bg-slate-200 py-2 px-4 text-xl font-bold m-auto"
           >View Grant</router-link
         >
       </div>
@@ -112,7 +112,7 @@ export default {
         const userId = this.$store.getters["auth/userId"];
         await this.$store.dispatch("book/GetGrants");
         const allGrants = this.$store.getters["book/grants"];
-
+        console.log(this.currentMood);
         if (
           allGrants.some(
             (e) => e.apiUserId === userId && e.bookId === this.bookId
@@ -120,6 +120,7 @@ export default {
         ) {
           this.currentMood = "alreadyDone";
         } else {
+          // this.currentMood = 'quiz';
           await this.$store.dispatch("book/getBookQuestions");
 
           const allQuestions = this.$store.getters["book/bookQuesions"];
@@ -153,6 +154,18 @@ export default {
         this.rightAnsCount++;
         this.isRightAns = true;
         li[key].classList.add("right");
+        const userId = this.$store.getters["auth/userId"];
+        this.isLoading = true;
+        const paylaod = {
+          apiUserId: userId,
+          questionId: this.currentQ.id,
+        };
+        try {
+          await this.$store.dispatch("book/AddQuestionData", paylaod);
+        } catch (e) {
+          console.log("faild to send data");
+        }
+        this.isLoading = false;
       } else {
         this.isRightAns = false;
         li.forEach((el) => {

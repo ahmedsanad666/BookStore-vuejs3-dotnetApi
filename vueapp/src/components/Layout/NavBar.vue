@@ -6,11 +6,9 @@
       <a href="#" class="flex items-center">
         <img
           src="../../assets/images/LOGO.png "
-          class=" mr-3 rounded-full w-[3rem] h-[3rem]"
+          class="mr-3 rounded-full w-[3rem] h-[3rem]"
           alt="Flowbite Logo"
         />
-       
-       
       </a>
 
       <button
@@ -103,6 +101,13 @@
               >الهداية</router-link
             >
           </li>
+          <li v-if="isLoggedIn">
+            <router-link
+              to="/libraries"
+              class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+              >المكتبات</router-link
+            >
+          </li>
           <li v-if="isLoggedIn && isAdmin">
             <router-link
               to="/categories"
@@ -150,7 +155,6 @@ export default {
       try {
         await this.$store.dispatch("book/Allcategory");
 
-        console.log(this.$store.getters["book/AllCategories"]);
         this.allCat = this.$store.getters["book/AllCategories"];
       } catch (e) {
         if (this.isLoggedIn) {

@@ -9,6 +9,8 @@ import BooksPage from '../views/BooksPage.vue'
 import store from "../store/index.js";
 import NotFound from '../views/NotFound.vue';
 import librarypage from '../views/Admin/librarypage.vue';
+import AllLibraries from '../views/AllLibraries.vue'
+
 
 
 
@@ -24,6 +26,15 @@ const routes = [
     meta:{
       title:'grants',
       requiresAuth: true
+    }
+  },
+  {
+    path:'/libraries',
+    name:'library',
+    component:AllLibraries,
+    meta:{
+      title:'all libraries',
+     
     }
   },
   {
