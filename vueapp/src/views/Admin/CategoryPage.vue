@@ -6,7 +6,13 @@
 
     <base-spinner v-if="isLoading"></base-spinner>
     <div class="container py-4 my-3 md:px-2" v-else>
-      <div>
+      <div class="w-[80%] m-auto flex -flex-row justify-between items-center flex-row-reverse" >
+        <router-link
+          to="/Admin/addLibrary"
+          class="my-3 py-2 px-4 bg-slate-900 text-white"
+        >
+          اضافة مكتبة
+        </router-link>
         <button
           @click="addNew()"
           class="my-3 py-2 px-4 bg-slate-900 text-white"
@@ -37,22 +43,9 @@
               >
                 {{ el.name }}
               </th>
-              <td class="px-6 py-4 des ">{{ el.description }}</td>
+              <td class="px-6 py-4 des">{{ el.description }}</td>
 
               <td class="px-6 py-4 space-x-4 space-y-3 text-center text-white">
-                <!-- <button
-                  @click="DeleteCourse(el.id)"
-                  class="py-2 px-4 bg-red-700 rounded-md md:mx-1"
-                >
-                  حذف
-                </button> -->
-                <!-- <button
-                  @click="update(el.id)"
-                  class="py-2 px-4 rounded-md bg-neutral-700 md:mx-1"
-                >
-                  تعديل
-                </button> -->
-
                 <router-link
                   class="py-2 px-4 rounded-md bg-amber-800 border"
                   :to="`/categories/${el.id}`"
@@ -102,7 +95,7 @@ export default {
       hidden: true,
       isLoading: false,
       Allcategory: [],
-      // formatedDate: "",
+
       error: "",
       courseId: 0,
       category: {
@@ -121,23 +114,6 @@ export default {
         await this.$store.dispatch("book/Allcategory");
 
         this.Allcategory = this.$store.getters["book/AllCategories"];
-        //  this.allCourses = this.allCourses.map(el =>{
-
-        //   const dateObj = dayjs(el.CreatedDate);
-        //       const Date = dateObj.format('ddd MMM');
-        //   const update = dayjs(el.updatedDate);
-        //       const updateD = update.format('ddd MMM');
-
-        //       {
-        //         return{
-        //           ...el,
-
-        //           Date,
-        //           updateD
-        //         }
-        //       }
-
-        //  })
       } catch (e) {
         this.Error = "failed to Get Courses" || e.message;
       }

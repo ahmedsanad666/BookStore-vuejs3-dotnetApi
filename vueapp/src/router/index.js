@@ -8,6 +8,7 @@ import BookGrants from '../views/BookGrants.vue';
 import BooksPage from '../views/BooksPage.vue'
 import store from "../store/index.js";
 import NotFound from '../views/NotFound.vue';
+import librarypage from '../views/Admin/librarypage.vue';
 
 
 
@@ -22,6 +23,15 @@ const routes = [
     component:BookGrants,
     meta:{
       title:'grants',
+      requiresAuth: true
+    }
+  },
+  {
+    path:'/Admin/addLibrary',
+    name:'add',
+    component:librarypage,
+    meta:{
+      title:'add',
       requiresAuth: true
     }
   },
