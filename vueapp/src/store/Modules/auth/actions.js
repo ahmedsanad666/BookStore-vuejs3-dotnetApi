@@ -23,14 +23,11 @@ export default{
         });
 
          const responseData = response.json();
-         console.log(response);
         if(!response.ok){
             const error =  new Error(responseData.message || "Failed to signup");
-            console.log(error);
 
             throw error;
         }
-        console.log(responseData);
 
 
     },

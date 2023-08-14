@@ -2,6 +2,9 @@
 const categoryLink = "https://localhost:7130/bookstore/categories";
 const bookLink = "https://localhost:7130/bookstore/books";
 const QuestionsLink = "https://localhost:7130/bookstore/Questions";
+const GrantsLink = "https://localhost:7130/bookstore/bookgrants";
+const libraryLink = "https://localhost:7130/bookstore/KnowledgeHubs";
+
 export default{
 
   //...................... category
@@ -15,7 +18,6 @@ export default{
         throw error;
       }
       const categories =[];
-      console.log(responseData);
        responseData.forEach(element => {
         categories.push(element);       
        });
@@ -33,9 +35,6 @@ export default{
         body:JSON.stringify(paylaod)
       },);
 
-      console.log(response);
-      console.log(JSON.stringify(paylaod));
-    
       if (!response.ok) {
         const error = 'failed to send data';
         throw error;
@@ -54,7 +53,6 @@ export default{
         throw error;
       }
       const books =[];
-      console.log(responseData);
        responseData.forEach(element => {
         books.push(element);       
        });
@@ -70,7 +68,6 @@ export default{
           body:paylaod
         },);
 
-        console.log(response);
       
         if (!response.ok) {
           const error = 'failed to send data';
@@ -89,7 +86,6 @@ export default{
             throw error;
           }
           const questions =[];
-          console.log(responseData);
            responseData.forEach(element => {
             questions.push(element);       
            });
@@ -108,12 +104,82 @@ export default{
               body:JSON.stringify(paylaod)
             },);
     
-            console.log(JSON.stringify(paylaod));
+          
+            if (!response.ok) {
+              const error = 'failed to send data';
+              throw error;
+            }
+          },
+      // .................................. grants
+
+      async GetGrants(context ){
+        const response = await fetch(libraryLink);
+          const responseData = await response.json();
+        
+          if (!response.ok) {
+            const error = new Error(responseData.message || 'failed to get libraries ');
+      
+            throw error;
+          }
+          const libraries =[];
+           responseData.forEach(element => {
+            libraries.push(element);       
+           });
+    
+            context.commit("setlibraries",libraries);
+        },
+
+          async AddGrant(_,paylaod ){
+            const response = await fetch(libraryLink,
+            {
+              method:'POST',
+            
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body:JSON.stringify(paylaod)
+            },);
+    
+          
+            if (!response.ok) {
+              const error = 'failed to send data';
+              throw error;
+            }
+          },
+      // .................................. libraries
+
+      async GetLibraries(context ){
+        const response = await fetch(GrantsLink);
+          const responseData = await response.json();
+        
+          if (!response.ok) {
+            const error = new Error(responseData.message || 'failed to get grants');
+      
+            throw error;
+          }
+          const grants =[];
+           responseData.forEach(element => {
+            grants.push(element);       
+           });
+    
+            context.commit("setGrants",grants);
+        },
+
+          async Addlibrary(_,paylaod ){
+            const response = await fetch(GrantsLink,
+            {
+              method:'POST',
+            
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body:JSON.stringify(paylaod)
+            },);
+    
           
             if (!response.ok) {
               const error = 'failed to send data';
               throw error;
             }
           }
-    
 }

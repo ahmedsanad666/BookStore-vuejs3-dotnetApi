@@ -4,9 +4,10 @@ import HomePage from '../views/HomePage.vue';
 import CategoryPage from '../views/Admin/CategoryPage.vue';
 import BookPage from '../views/Admin/BookPage.vue';
 import QuestionsPage from '../views/Admin/QuestionsPage.vue';
-
-
-
+import BookGrants from '../views/BookGrants.vue';
+import BooksPage from '../views/BooksPage.vue'
+import store from "../store/index.js";
+import NotFound from '../views/NotFound.vue';
 
 
 
@@ -14,6 +15,24 @@ const routes = [
 {
     path:'/',
     redirect:'/home',
+  },
+  {
+    path:'/grants',
+    name:'grants',
+    component:BookGrants,
+    meta:{
+      title:'grants',
+      requiresAuth: true
+    }
+  },
+  {
+    path:'/Books/:catId',
+    name:'Books',
+    component:BooksPage,
+    meta:{
+      title:'Books',
+     
+    }
   },
   {
     path:'/home',
@@ -28,7 +47,8 @@ const routes = [
     name:'Auth',
     component:AuthPage,
     meta:{
-      title:'Auth'
+      title:'Auth',
+      requiresUnauth: true
     }
   },
   {
@@ -36,7 +56,8 @@ const routes = [
     name:'categories',
     component:CategoryPage,
     meta:{
-      title:'category'
+      title:'category',
+      requiresAuth: true
     }
   },
   {
@@ -52,9 +73,11 @@ const routes = [
     name:'quiz',
     component:QuestionsPage,
     meta:{
-      title:'quiz'
+      title:'quiz',
+      requiresAuth: true
     }
-  }
+  },
+  { path: '/:notFound(.*)', component: NotFound },
 
 ];
 
@@ -64,9 +87,15 @@ const router = createRouter({
 });
 
 router.beforeEach((to,_,next)=>{
-
-    document.title = to.meta.title;
+  document.title = to.meta.title;
+  if (to.meta.requiresAuth && !store.getters["auth/isAuthenticated"]) {
+    next('/auth');
+  } else if (to.meta.requiresUnauth && store.getters["auth/isAuthenticated"]) {
+    next('/');
+  } else {
     next();
+  }
+
 });
 
 export default router;

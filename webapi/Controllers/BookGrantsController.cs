@@ -8,7 +8,7 @@ using webapi.Models;
 
 namespace webapi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("bookstore/[controller]")]
     [ApiController]
     public class BookGrantsController : ControllerBase
     {
@@ -50,8 +50,9 @@ namespace webapi.Controllers
 
             _context.BookGrants.Add(Grant);
             await _context.SaveChangesAsync();
+                var result = CreatedAtAction(nameof(PostBook), new { id = Grant.Id }, Grant);
+            return result;
 
-            return CreatedAtAction("GetCourse", new { id = Grant.Id }, Grant);
         }
 
     }

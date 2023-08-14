@@ -9,6 +9,8 @@ export default{
             categories:[],
             books:[],
             questions:[],
+            grants:[],
+            libraries:[]
         }
     },
     actions,

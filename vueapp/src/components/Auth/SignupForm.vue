@@ -157,7 +157,6 @@ export default {
         async submitData(){
             this.validForm = true;
             this.isValidForm();
-            console.log(this.validForm);
             if(!this.validForm){
                return;
             }
@@ -175,7 +174,6 @@ export default {
                     location.reload();
             }catch(e){
                 this.error = new Error(e.message || "failed Try again");
-                console.log("error");
 
             }
             this.isLoading = false;

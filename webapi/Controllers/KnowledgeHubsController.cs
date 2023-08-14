@@ -6,7 +6,7 @@ using webapi.Models;
 
 namespace webapi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("bookstore/[controller]")]
     [ApiController]
     public class KnowledgeHubsController : ControllerBase
     {

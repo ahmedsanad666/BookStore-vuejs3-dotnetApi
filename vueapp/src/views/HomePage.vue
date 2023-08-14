@@ -1,10 +1,15 @@
 <template>
-  <section class="container my-4 py-5">
-    <quiz-section ref="quiz" :showD="show" 
-   
-    @try-close="closeQuiz"></quiz-section>
+  <section class="container my-4 py-5 min-h-screen">
+    <quiz-section
+      ref="quiz"
+      :showD="show"
+      @try-close="closeQuiz"
+    ></quiz-section>
     <base-spinner v-if="isLoading"></base-spinner>
-    <div class="grid lg:grid-cols-3 md:grid-cols-2 grid-col-1 gap-1">
+    <div
+      class="grid lg:grid-cols-3 md:grid-cols-2 grid-col-1 gap-1"
+      v-if="allBooks.length > 0"
+    >
       <div
         class="card max-w-sm m-auto bg-white ounded-lg shadow-lg rounded-lg"
         v-for="(book, k) in allBooks"
@@ -39,7 +44,7 @@
             </a>
             <button
               class="py-1 px-2 bg-emerald-400 text-white rounded-md"
-              @click="showQuiz(book.id)"
+              @click="showQuiz(book.id, book.daysToRead, book.title, book.isbn)"
             >
               Grent Quiz
             </button>
@@ -47,6 +52,9 @@
         </div>
       </div>
     </div>
+    <h1 v-else class="text-center md:text-3xl text-2xl my-4 py-4">
+      لم يتم تحمل ملفات بعد
+    </h1>
   </section>
 </template>
 
@@ -60,22 +68,22 @@ export default {
       allBooks: [],
       show: false,
       qtest: [],
-      allQuestions:[]
+      allQuestions: [],
     };
   },
+
   methods: {
-    
     closeQuiz() {
       this.show = false;
-      
     },
-    async showQuiz(id) {
+    async showQuiz(id, days, title, isbn) {
+      let checkLog = this.$store.getters["auth/isAuthenticated"];
+      if (!checkLog) {
+        await this.$router.replace("/auth");
+        location.reload();
+      }
       this.show = true;
-      console.log(this.$refs.quiz)
-      this.$refs.quiz.loadData(id);
-     
-
-    
+      this.$refs.quiz.loadData(id, days, title, isbn);
     },
     async loadBooks() {
       this.isLoading = true;

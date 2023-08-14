@@ -4,8 +4,7 @@
       <div class="overlay" @click="$emit('TryClose')"></div>
     </Teleport>
     <!-- question -->
-
-    <div v-if="currentMood === 'quiz'">
+    <div v-if="currentMood === 'quiz' && !currentQ">
       <div class="h-full w-[90%] space-y-6 m-auto py-6">
         <div class="bg-mianColor py-7 shadow-lg px-5 rounded-xl mx-auto">
           <p class="text-center max-w-xl mx-auto">
@@ -35,11 +34,28 @@
       </div>
     </div>
     <div v-else-if="currentMood === 'win'">
-    <h1 class="text-center my-4 py-4 text-3xl">you win</h1>
-</div>
-<div v-else>
-        <h1 class="text-center my-4 py-4 text-3xl">you failed</h1>
-    
+      <base-spinner v-if="isLoading"></base-spinner>
+
+      <h1 class="text-center my-4 py-4 text-3xl" v-if="error">{{ error }}</h1>
+      <h1 class="text-center my-4 py-4 text-3xl" v-if="message">
+        {{ message }}
+      </h1>
+      <div class="w-full py-2 mt-3">
+        <router-link to="/grants" class="py-2 px-4 text-xl font-bold m-auto"
+          >View Grant</router-link
+        >
+      </div>
+    </div>
+    <div v-else-if="currentMood === 'noQuiz'">
+      <h1 class="text-center my-4 py-4 text-3xl">
+        غير متاح امتحان على هذا الكتاب
+      </h1>
+    </div>
+    <div v-else-if="currentMood === 'lose'">
+      <h1 class="text-center my-4 py-4 text-3xl">you failed</h1>
+    </div>
+    <div v-else>
+      <h1 class="text-center my-4 py-4 text-3xl">Already Token</h1>
     </div>
   </section>
 </template>
@@ -64,6 +80,11 @@ export default {
       currentChoice: 0,
       isLoading: false,
       rightAnsCount: 0,
+      message: "",
+      error: "",
+      daysToread: 0,
+      isbn: "",
+      title: "",
     };
   },
 
@@ -80,19 +101,37 @@ export default {
       this.questionCounter++;
       this.loadCurrentQ();
     },
-    async loadData(id) {
+    async loadData(id, days, title, isbn) {
       this.bookId = id;
       this.isLoading = true;
+      this.daysToread = days;
+      this.isbn = isbn;
+      this.title = title;
 
       try {
-        await this.$store.dispatch("book/getBookQuestions");
+        const userId = this.$store.getters["auth/userId"];
+        await this.$store.dispatch("book/GetGrants");
+        const allGrants = this.$store.getters["book/grants"];
 
-        const allQuestions = this.$store.getters["book/bookQuesions"];
+        if (
+          allGrants.some(
+            (e) => e.apiUserId === userId && e.bookId === this.bookId
+          )
+        ) {
+          this.currentMood = "alreadyDone";
+        } else {
+          await this.$store.dispatch("book/getBookQuestions");
 
-        const bookQ = allQuestions.filter((e) => e.bookId === this.bookId);
+          const allQuestions = this.$store.getters["book/bookQuesions"];
 
-        this.Questions = bookQ;
-        this.loadCurrentQ();
+          const bookQ = allQuestions.filter((e) => e.bookId === this.bookId);
+          if (bookQ.length === 0) {
+            this.currentMood = "noQuiz";
+            return;
+          }
+          this.Questions = bookQ;
+          this.loadCurrentQ();
+        }
       } catch (e) {
         this.Error = "failed to Get Courses" || e.message;
       }
@@ -102,7 +141,7 @@ export default {
       this.currentQ = this.Questions[this.questionCounter];
     },
 
-    checkAns(key) {
+    async checkAns(key) {
       this.currentChoice = key;
       const choice = this.currentChoice + 1;
       const rithAns = this.currentQ.answer;
@@ -110,7 +149,6 @@ export default {
       let lastQuestion =
         this.questionCounter == this.Questions.length - 1 ? true : false;
 
-      console.log(this.Questions.length);
       if (choice == rithAns) {
         this.rightAnsCount++;
         this.isRightAns = true;
@@ -127,6 +165,26 @@ export default {
       if (lastQuestion) {
         if (this.rightAnsCount == this.Questions.length) {
           this.currentMood = "win";
+
+          // add user grant
+          const userId = this.$store.getters["auth/userId"];
+          const grant = {
+            apiUserId: userId,
+            grantCode: Date.now().toString(),
+            validTillDate: this.daysToread,
+            bookTitle: this.title,
+            isbn: this.isbn,
+            bookId: this.bookId,
+          };
+
+          this.isLoading = true;
+          try {
+            await this.$store.dispatch("book/AddGrant", grant);
+            this.message = "congratulations your have got your BookGrant";
+          } catch (e) {
+            this.error = "failed to Get Courses" || e.message;
+          }
+          this.isLoading = false;
         } else {
           this.currentMood = "lose";
         }

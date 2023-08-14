@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using webapi.Data;
 
@@ -11,9 +12,11 @@ using webapi.Data;
 namespace webapi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230814013846_updatrta")]
+    partial class updatrta
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,13 +54,13 @@ namespace webapi.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "99e39f6b-0545-4930-b83c-65f8e776ca04",
+                            Id = "483ec75a-fb6d-4ea8-8c89-ec0a03bbeb06",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "83217412-a3b6-41e7-9d98-158f4bd5c6e5",
+                            Id = "5d7540a4-4a52-443c-98f0-1e84c203f7b2",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -313,9 +316,6 @@ namespace webapi.Migrations
 
                     b.Property<string>("ApiUserId")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("BookId")
-                        .HasColumnType("int");
 
                     b.Property<string>("BookTitle")
                         .HasColumnType("nvarchar(max)");

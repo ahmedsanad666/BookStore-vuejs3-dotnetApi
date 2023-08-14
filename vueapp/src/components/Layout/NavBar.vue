@@ -5,14 +5,12 @@
     >
       <a href="#" class="flex items-center">
         <img
-          src="https://flowbite.com/docs/images/logo.svg"
-          class="h-8 mr-3"
+          src="../../assets/images/LOGO.png "
+          class=" mr-3 rounded-full w-[3rem] h-[3rem]"
           alt="Flowbite Logo"
         />
-        <span
-          class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"
-          >Flowbite</span
-        >
+       
+       
       </a>
 
       <button
@@ -87,46 +85,27 @@
                 class="py-2 text-sm text-gray-700 dark:text-gray-400"
                 aria-labelledby="dropdownLargeButton"
               >
-                <li>
-                  <a
-                    href="#"
-                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    >Dashboard</a
+                <li v-for="(el, key) in allCat" :key="key">
+                  <router-link
+                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
+                    :to="`/books/${el.id}`"
                   >
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    >Settings</a
-                  >
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    >Earnings</a
-                  >
+                    {{ el.name }}
+                  </router-link>
                 </li>
               </ul>
-              <div class="py-1">
-                <a
-                  href="#"
-                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-400 dark:hover:text-white"
-                  >Sign out</a
-                >
-              </div>
             </div>
           </li>
           <li v-if="isLoggedIn">
-            <a
-              href="#"
+            <router-link
+              to="/grants"
               class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-              >الهداية</a
+              >الهداية</router-link
             >
           </li>
           <li v-if="isLoggedIn && isAdmin">
-            <router-link to="/categories"
+            <router-link
+              to="/categories"
               href="#"
               class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
               >لوحة التحكم</router-link
@@ -148,26 +127,45 @@
 
 <script>
 export default {
-  data() {},
+  data() {
+    return {
+      allCat: [],
+    };
+  },
   computed: {
     isLoggedIn() {
-     return this.$store.getters['auth/isAuthenticated'];
-    
+      return this.$store.getters["auth/isAuthenticated"];
     },
+
     isAdmin() {
       return this.$store.getters["auth/isAdmin"];
     },
   },
   methods: {
+    link(id) {
+      const linkb = "/home/Books/" + id;
+      return linkb;
+    },
+    async categories() {
+      try {
+        await this.$store.dispatch("book/Allcategory");
+
+        console.log(this.$store.getters["book/AllCategories"]);
+        this.allCat = this.$store.getters["book/AllCategories"];
+      } catch (e) {
+        if (this.isLoggedIn) {
+          alert("filed to get categories ");
+        }
+      }
+    },
     logOut() {
       this.$store.dispatch("auth/logout");
       this.$router.replace("/home");
     },
- 
   },
 
   created() {
-   
+    this.categories();
   },
 };
 </script>
