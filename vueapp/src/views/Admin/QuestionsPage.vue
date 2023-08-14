@@ -119,10 +119,13 @@ export default {
   methods: {
     async getbookQuestions() {
       this.isLoading = true;
+      const bookId = +this.$route.params.bookId;
       try {
         await this.$store.dispatch("book/getBookQuestions");
 
         this.allQuestions = this.$store.getters["book/bookQuesions"];
+        this.allQuestions = this.allQuestions.filter(e=>e.bookId === bookId);
+        console.log(this.allQuestions)
       } catch (e) {
         this.error = e.message || "failed to get questions";
       }
